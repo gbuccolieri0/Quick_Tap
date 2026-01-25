@@ -114,13 +114,16 @@ class _MenuScreenState extends State<MenuScreen>
                           ],
                         ),
                       ),
-                      
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 80),
                       ElevatedButton(
                         onPressed: () {
                           context.goNamed(AppRoute.game.name);
                         },
-                        child: const Text('Start Game'),
+                        child: 
+                          const Text(
+                              'Start game',
+                              style: TextStyle(fontSize: 24, color: Color.fromARGB(255, 0, 52, 95)),
+                           ),
                       ),
                     ],
                   ),
