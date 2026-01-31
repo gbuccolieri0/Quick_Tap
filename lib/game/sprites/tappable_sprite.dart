@@ -1,13 +1,11 @@
-
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
-import 'shape.dart';
+import 'game_shape.dart'; // Assicurati che il percorso sia corretto
 
 typedef OnTapDown = void Function(TapDownEvent event);
 
 class TappableSprite extends PositionComponent with TapCallbacks {
-  late final Shape shape;
   final ShapeType shapeType;
   final double shapeSize;
   final Color color;
@@ -18,26 +16,32 @@ class TappableSprite extends PositionComponent with TapCallbacks {
     required this.shapeSize,
     required this.color,
     this.onTapDownCallback,
-  });
+    super.position, // Passiamo la posizione al costruttore padre
+  }) : super(size: Vector2.all(shapeSize)); // Fondamentale: imposta la grandezza per il tap
 
   @override
-  void onLoad() {
+  Future<void> onLoad() async {
     super.onLoad();
-    
-    // Crea la shape
-    shape = Shape(
+
+    // Creiamo la visualizzazione della shape
+    // Usiamo Vector2.zero() perché la posizione è relativa al padre (TappableSprite)
+    final shapeVisual = GameShape(
+      position: Vector2.zero(),
+      size: shapeSize,
       shapeType: shapeType,
-      shapeSize: shapeSize,
       color: color,
     );
-    add(shape);
+
+    add(shapeVisual);
   }
 
-  // Gestisce il tap sullo sprite
   @override
   void onTapDown(TapDownEvent event) {
+    // 1. Logica interna: stampa il tipo di shape trovata
+    print("Hai toccato la shape: ${shapeType.name}");
+
+    // 2. Esegue il callback esterno se presente
     super.onTapDown(event);
     onTapDownCallback?.call(event);
   }
-
 }

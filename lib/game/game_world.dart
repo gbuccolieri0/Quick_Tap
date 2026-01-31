@@ -1,27 +1,33 @@
 import 'package:quick_tap/game/quick_tap_game.dart';
 import 'package:flame/components.dart';
-// import 'package:flutter_application_1/game/level_data.dart';
 import 'dart:async';
-import 'package:quick_tap/game/sprites/shape.dart';
 import 'package:flutter/material.dart'; 
 import 'package:quick_tap/constants.dart';
+import 'package:quick_tap/game/sprites/game_shape.dart';
+import 'package:quick_tap/game/sprites/tappable_sprite.dart';
 
 class GameWorld extends World with HasGameReference<QuickTapGame> {
 
-  // GPPBCC
-  //  Devo disegnare le shape senza che ci siano degli errori
-  // Shape triangle = Shape(
-  //   shapeType: ShapeType.triangle,
-  //   shapeSize: 90,
-  //   color: Colors.red,
-  // );
+  final shape = GameShape(
+    position: Vector2(-100, -500), 
+    // quando scrivi la posizione ricorda di considerare la dimensione del componente
+    size: 200,
+    color: Colors.purple,
+    shapeType: ShapeType.rectangle,
+  );
 
+  final tappableSprite = TappableSprite(
+    shapeType: ShapeType.circle,
+    shapeSize: 100,
+    color: Colors.red,
+    position: Vector2(100, 0),
+  );
   
   @override
   FutureOr<void> onLoad() {
     super.onLoad();
-    // add(Player(position: Vector2(gameWidth/4, 0.0), radius: gameHeight/8));
-    // add(triangle);
+    add(shape);
+    add(tappableSprite);
    }
 }
 
