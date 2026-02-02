@@ -2,33 +2,79 @@ import 'package:quick_tap/game/quick_tap_game.dart';
 import 'package:flame/components.dart';
 import 'dart:async';
 import 'package:flutter/material.dart'; 
-import 'package:quick_tap/constants.dart';
 import 'package:quick_tap/game/sprites/game_shape.dart';
-import 'package:quick_tap/game/sprites/tappable_sprite.dart';
+import 'package:quick_tap/game/level.dart';
+import 'package:quick_tap/game/level_data.dart';
 
 class GameWorld extends World with HasGameReference<QuickTapGame> {
+  late Level currentLevel;
+  // final shape = GameShape(
+  //   position: Vector2(-100, -500), 
+  //   // quando scrivi la posizione ricorda di considerare la dimensione del componente
+  //   velocity: Vector2(150, 160),
+  //   size: 200,
+  //   color: Colors.purple,
+  //   shapeType: ShapeType.rectangle,
+  // );
 
-  final shape = GameShape(
-    position: Vector2(-100, -500), 
-    // quando scrivi la posizione ricorda di considerare la dimensione del componente
-    size: 200,
-    color: Colors.purple,
-    shapeType: ShapeType.rectangle,
-  );
+  // final shape2 = GameShape(
+  //   position: Vector2(-100, -500), 
+  //   // quando scrivi la posizione ricorda di considerare la dimensione del componente
+  //   velocity: Vector2(180, 260),
+  //   size: 200,
+  //   color: Colors.black,
+  //   shapeType: ShapeType.circle,
+  // );
 
-  final tappableSprite = TappableSprite(
-    shapeType: ShapeType.circle,
-    shapeSize: 100,
-    color: Colors.red,
-    position: Vector2(100, 0),
-  );
+  // final shape3 = GameShape(
+  //   position: Vector2(-100, -500), 
+  //   // quando scrivi la posizione ricorda di considerare la dimensione del componente
+  //   velocity: Vector2.zero(),
+  //   size: 200,
+  //   color: Colors.orange,
+  //   shapeType: ShapeType.triangle,
+  // );
+
   
+  void loadLevel(Level level) {
+    currentLevel = level;
+    
+    // 1. Rimuovi i componenti del livello precedente (se presenti)
+    children.whereType<GameShape>().forEach((shape) => shape.removeFromParent());
+
+    // 2. Aggiungi le nuove forme
+    for (var config in level.shapes) {
+      add(GameShape(
+        shapeType: config.type,
+        color: config.color,
+        position: config.position,
+        velocity: config.velocity,
+        size: 100,
+      ));
+    }
+
+    print("Livello ${level.number} caricato: ${level.instruction}");
+  }
+  
+  void checkTappedShape(GameShape shape) {
+    print("Checking winning shape ${currentLevel.isWinCondition(shape)}");
+    if (currentLevel.isWinCondition(shape)) {
+      print("Bravo! Continua così.");
+    } else {
+      print("HAI PERSO: ${currentLevel.instruction}");
+      // Qui puoi gestire il game over
+    }
+  }
+
   @override
   FutureOr<void> onLoad() {
     super.onLoad();
-    add(shape);
-    add(tappableSprite);
+    // add(shape);
+    // add(shape2);
+    // add(shape3);
+    loadLevel(LevelData().getLevel(1));
    }
+
 }
 
 // class GoGreenWorld extends World with HasGameReference<GoGreenGame> {
