@@ -24,6 +24,7 @@ class GameShapeConfig {
   final Vector2 position;
   final Vector2 velocity;
   final double rotationSpeed;
+  final double size;
 
   GameShapeConfig({
     required this.type,
@@ -31,5 +32,6 @@ class GameShapeConfig {
     required this.position,
     required this.velocity,
     this.rotationSpeed = 0,
+    required this.size,
   });
 }
