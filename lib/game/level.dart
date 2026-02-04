@@ -23,11 +23,13 @@ class GameShapeConfig {
   final Color color;
   final Vector2 position;
   final Vector2 velocity;
+  final double rotationSpeed;
 
   GameShapeConfig({
     required this.type,
     required this.color,
     required this.position,
     required this.velocity,
+    this.rotationSpeed = 0,
   });
 }

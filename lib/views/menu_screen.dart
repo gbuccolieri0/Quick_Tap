@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quick_tap/router.dart';
+import 'package:quick_tap/constants.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -41,95 +42,75 @@ class _MenuScreenState extends State<MenuScreen>
         title: const Text('Menu Screen'),
       ),
       body: Center(
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          width: MediaQuery.of(context).size.width * 0.3,
-          height: MediaQuery.of(context).size.width * 0.45,
-          decoration: BoxDecoration(
-            color: Colors.blue[100],
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                height: 100, // Height for the Icon
-                child: SlideTransition(
-                  position: _offsetAnimation,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // Contorno/Sfondo
-                      Icon(
-                        Icons.flash_on_rounded,
-                        color: Colors.orangeAccent, // Colore del contorno
-                        size: 105,
-                      ),
-                      // Interno
-                      Icon(
-                        Icons.flash_on_rounded,
-                        color: Colors.yellowAccent, // Colore interno
-                        size: 100,
-                      ),
-                    ],
+        // 1. Usiamo SingleChildScrollView per evitare l'errore se lo schermo è troppo basso
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            // 2. Usiamo BoxConstraints invece di width/height fissi:
+            // Definiamo una larghezza massima ma lasciamo che l'altezza si adatti al contenuto
+            constraints: BoxConstraints(
+              maxWidth: gameWidth, // Larghezza ideale per un menu
+              minWidth: MediaQuery.of(context).size.width * 0.3, // Minimo 80% su schermi piccoli
+            ),
+            decoration: BoxDecoration(
+              color: Colors.blue[100],
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min, // La colonna occupa solo lo spazio necessario
+              children: [
+                // Icona animata
+                SizedBox(
+                  height: 120, 
+                  child: SlideTransition(
+                    position: _offsetAnimation,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: const [
+                        Icon(Icons.flash_on_rounded, color: Colors.orangeAccent, size: 105),
+                        Icon(Icons.flash_on_rounded, color: Colors.yellowAccent, size: 100),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Column(
-                    children: [
-                      // Add your other widgets here
-                      const Text(
-                        'Quick Tap!',
-                        style: TextStyle(
-                            fontSize: 44, 
-                            color: Colors.white, 
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.normal,
-                            shadows: [
-                              Shadow(
-                                offset: Offset(2, 2),
-                                blurRadius: 2.0,
-                                color: Colors.black45,
-                              ),
-                            ]
-                          ),
-                      ),
-                      Center(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const SizedBox(height: 20),
-                            const Text(
-                              'Follow the rule',
-                              style: TextStyle(fontSize: 20, color: Colors.blue),
-                            ),
-                            
-                            const Text(
-                              'Before time runs out',
-                              style: TextStyle(fontSize: 16, color: Colors.blue),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 80),
-                      ElevatedButton(
-                        onPressed: () {
-                          context.goNamed(AppRoute.game.name);
-                        },
-                        child: 
-                          const Text(
-                              'Start game',
-                              style: TextStyle(fontSize: 24, color: Color.fromARGB(255, 0, 52, 95)),
-                           ),
-                      ),
-                    ],
+                
+                const Text(
+                  'Quick Tap!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 44, 
+                    color: Colors.white, 
+                    fontWeight: FontWeight.bold,
+                    shadows: [Shadow(offset: Offset(2, 2), blurRadius: 2.0, color: Colors.black45)]
                   ),
                 ),
-              ),
-            ],
+
+                const SizedBox(height: 10),
+                
+                const Text(
+                  'Follow the rule',
+                  style: TextStyle(fontSize: 20, color: Colors.blue),
+                ),
+                const Text(
+                  'Before time runs out',
+                  style: TextStyle(fontSize: 16, color: Colors.blue),
+                ),
+
+                // 3. Ridotto lo spazio eccessivo (80 era troppo per contenitori piccoli)
+                const SizedBox(height: 40),
+
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  ),
+                  onPressed: () => context.goNamed(AppRoute.game.name),
+                  child: const Text(
+                    'Start game',
+                    style: TextStyle(fontSize: 24, color: Color.fromARGB(255, 0, 52, 95)),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

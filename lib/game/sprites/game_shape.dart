@@ -12,6 +12,7 @@ class GameShape extends PositionComponent with TapCallbacks, HasGameReference<Qu
   final Color color;
   Vector2 velocity;
   final OnTapDown? onTapDownCallback;
+  double rotationSpeed;
 
   GameShape({
     required Vector2 position,
@@ -20,7 +21,15 @@ class GameShape extends PositionComponent with TapCallbacks, HasGameReference<Qu
     required this.shapeType,
     this.color = Colors.blue,
     this.onTapDownCallback,
-  }) : super(position: position, size: Vector2.all(size));
+    this.rotationSpeed = 0, // Default: nessuna rotazione
+    double initialAngle = 0, // Angolo iniziale in radianti
+  }) : super
+    (
+      position: position, 
+      size: Vector2.all(size),
+      angle: initialAngle,
+      anchor: Anchor.center, // IMPORTANTE: Ruota attorno al centro
+    );
 
   @override
   void update(double dt) {
@@ -30,27 +39,30 @@ class GameShape extends PositionComponent with TapCallbacks, HasGameReference<Qu
     // Se velocity è Vector2(0,0), la forma rimarrà ferma.
     position += velocity * dt;
 
+    // Applichiamo la rotazione
+    angle += rotationSpeed * dt;
+
     // 2. Logica di rimbalzo (Bounce)
     _checkBounds();
   }
 
   void _checkBounds() {
     // Bordi orizzontali (Destra e Sinistra)
-    if (position.x + size.x >= gameWidth/2) {
+    if (position.x + size.x >= gameWidth/2 + size.x/2) {
       velocity.x = -velocity.x.abs(); // Forza la direzione a sinistra
-      position.x = gameWidth/2 - size.x;
-    } else if (position.x <= -gameWidth/2) {
+      position.x = gameWidth/2 - size.x/2;
+    } else if (position.x <= -gameWidth/2 + size.x/2) {
       velocity.x = velocity.x.abs(); // Forza la direzione a destra
-      position.x = -gameWidth/2;
+      position.x = -gameWidth/2 + size.x/2;
     }
 
     // Bordi verticali (Sopra e Sotto)
-    if (position.y + size.y >= gameHeight/2) {
+    if (position.y + size.y >= gameHeight/2 + size.y/2) {
       velocity.y = -velocity.y.abs(); // Forza la direzione in su
-      position.y = gameHeight/2 - size.y;
-    } else if (position.y <= -gameHeight/2) {
+      position.y = gameHeight/2 - size.y/2;
+    } else if (position.y <= -gameHeight/2 + size.y/2) {
       velocity.y = velocity.y.abs(); // Forza la direzione in giù
-      position.y = -gameHeight/2;
+      position.y = -gameHeight/2 + size.y/2;
     }
   }
 

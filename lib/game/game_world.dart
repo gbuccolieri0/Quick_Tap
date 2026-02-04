@@ -49,6 +49,7 @@ class GameWorld extends World with HasGameReference<QuickTapGame> {
         color: config.color,
         position: config.position,
         velocity: config.velocity,
+        rotationSpeed: config.rotationSpeed,
         size: 100,
       ));
     }

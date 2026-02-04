@@ -12,7 +12,7 @@ class LevelData {
           instruction: "NON TOCCARE I QUADRATI!",
           isWinCondition: (shape) => shape.shapeType != ShapeType.square,
           shapes: [
-            GameShapeConfig(type: ShapeType.triangle, color: Colors.blue, position: Vector2(100, 100), velocity: Vector2(100, 100)),
+            GameShapeConfig(type: ShapeType.triangle, color: Colors.blue, position: Vector2(100, 100), velocity: Vector2(300, 300), rotationSpeed: 1),
             GameShapeConfig(type: ShapeType.square, color: Colors.red, position: Vector2(200, 100), velocity: Vector2(-50, 150)),
             GameShapeConfig(type: ShapeType.square, color: Colors.green, position: Vector2(50, 300), velocity: Vector2(80, -40)),
           ],
