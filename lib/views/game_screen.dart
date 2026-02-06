@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:quick_tap/game/quick_tap_game.dart';
 import 'package:quick_tap/game/game_end_state.dart';
 import 'package:quick_tap/constants.dart';
+import 'package:go_router/go_router.dart';
+import 'package:quick_tap/router.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
@@ -21,13 +23,13 @@ class _GameScreenState extends State<GameScreen> {
     game = QuickTapGame(
       endCallback: (GameEndState endState) {
         switch (endState) {
-          case GameEndState.wrong:
-            // context.goNamed(AppRoute.endWrong.name);
-            debugPrint('End State: Wrong');
+          case GameEndState.lose:
+            context.goNamed(AppRoute.endLose.name);
+            debugPrint('End State: Lose');
             break;
-          case GameEndState.correct:
-            // context.goNamed(AppRoute.endCorrect.name);
-            debugPrint('End State: Correct');
+          case GameEndState.win:
+            context.goNamed(AppRoute.endWin.name);
+            debugPrint('End State: Win');
             break;
         }
         // context.goNamed(AppRoute.end.name);

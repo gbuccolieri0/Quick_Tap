@@ -1,4 +1,4 @@
 enum GameEndState {
-  wrong,
-  correct // winning state
+  lose,
+  win // winning state
 }
